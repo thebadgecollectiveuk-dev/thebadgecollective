@@ -1,0 +1,219 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+  The Badge Collective design tokens.
+  Premium, dark, metallic. Chrome is the only "colour".
+*/
+
+:root {
+  /* Core palette */
+  --bg: #0a0a0a;
+  --surface: #141414;
+  --surface-2: #1a1a1a;
+  --text: #f5f5f5;
+  --text-muted: #a0a0a0;
+  --hairline: #262626;
+
+  --chrome: #c0c0c0;
+  --chrome-bright: #e8e8e8;
+  --chrome-dark: #9a9a9a;
+
+  /* Metallic gradients */
+  --gradient-chrome: linear-gradient(
+    145deg,
+    #8f8f8f 0%,
+    #c0c0c0 18%,
+    #e8e8e8 38%,
+    #f6f6f6 50%,
+    #dedede 60%,
+    #b2b2b2 82%,
+    #8a8a8a 100%
+  );
+  --gradient-chrome-soft: linear-gradient(145deg, #d2d2d2 0%, #ededed 50%, #a6a6a6 100%);
+  --gradient-chrome-line: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(120, 120, 120, 0.35) 22%,
+    rgba(232, 232, 232, 0.85) 50%,
+    rgba(120, 120, 120, 0.35) 78%,
+    transparent 100%
+  );
+
+  /* shadcn-compatible semantic tokens (mapped to brand palette) */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: #121212;
+  --popover-foreground: var(--text);
+  --primary: #e6e6e6;
+  --primary-foreground: #0a0a0a;
+  --secondary: #1c1c1c;
+  --secondary-foreground: #f5f5f5;
+  --muted: #141414;
+  --muted-foreground: var(--text-muted);
+  --accent: #1f1f1f;
+  --accent-foreground: #f5f5f5;
+  --destructive: #a85454;
+  --destructive-foreground: #f5f5f5;
+  --border: var(--hairline);
+  --input: #2a2a2a;
+  --ring: #8a8a8a;
+  --radius: 0.25rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chrome: var(--chrome);
+  --color-chrome-bright: var(--chrome-bright);
+  --color-chrome-dark: var(--chrome-dark);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-hairline: var(--hairline);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: var(--font-cormorant), ui-serif, Georgia, "Times New Roman", serif;
+
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 2px);
+  --radius-xl: calc(var(--radius) + 6px);
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Soft chrome glow off the top edge, painted behind content and never over it */
+    background-image: radial-gradient(
+      ellipse 90% 55% at 50% -18%,
+      rgba(200, 202, 210, 0.06),
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+  }
+
+  ::selection {
+    background: rgba(232, 232, 232, 0.92);
+    color: #0a0a0a;
+  }
+
+  /* Restrained, on-brand scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #3a3a3a transparent;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2e2e2e;
+    border: 2px solid var(--bg);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3d3d3d;
+  }
+}
+
+/* ============ Brand utilities ============ */
+
+/* Chrome gradient clipped to text */
+@utility text-chrome {
+  background-image: var(--gradient-chrome);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Chrome gradient as a fill (buttons, accents) */
+@utility chrome-fill {
+  background-image: var(--gradient-chrome);
+}
+
+/* Thin metallic divider line */
+@utility chrome-rule {
+  height: 1px;
+  width: 100%;
+  border: 0;
+  background-image: var(--gradient-chrome-line);
+}
+
+/* Uppercase eyebrow / label */
+@utility label-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+/* Radial glow behind product imagery */
+@utility product-glow {
+  background-image: radial-gradient(
+    closest-side,
+    rgba(196, 198, 206, 0.16),
+    rgba(196, 198, 206, 0.05) 55%,
+    transparent 78%
+  );
+}
+
+/* Fine-grain texture overlay (applied to a fixed, non-interactive layer) */
+@utility grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
