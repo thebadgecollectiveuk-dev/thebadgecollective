@@ -138,13 +138,21 @@ function fromStripe(p: Stripe.Product): Product {
 export async function getProducts(): Promise<Product[]> {
   if (!stripe) return PRODUCTS;
 
-  const res = await stripe.products.list({
-    active: true,
-    expand: ["data.default_price"],
-    limit: 100,
-  });
-  // Only sellable products (those with a usable price).
-  return res.data.map(fromStripe).filter((p) => p.priceId && p.unitAmount > 0);
+  try {
+    const res = await stripe.products.list({
+      active: true,
+      expand: ["data.default_price"],
+      limit: 100,
+    });
+    // Only sellable products (those with a usable price).
+    return res.data.map(fromStripe).filter((p) => p.priceId && p.unitAmount > 0);
+  } catch (err) {
+    // Never let a Stripe error crash the build or the page. Log it and show an
+    // empty catalogue; it self-heals on the next revalidation once Stripe is
+    // reachable / the key is valid.
+    console.error("Failed to load products from Stripe:", err);
+    return [];
+  }
 }
 
 /** Return a single product by id, or null. Reads Stripe in live mode. */
