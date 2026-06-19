@@ -1,11 +1,13 @@
 /**
  * Product data layer.
  *
- * This is the single point of swap when Stripe is wired in. Today it returns
- * a hardcoded mock array. Later, the internals of getProducts() / getProduct()
- * become a Stripe call (see README, "How to add Stripe later"). The exported
- * function signatures and the Product shape must not change.
+ * Single swap point for Stripe. In live mode (Stripe key set) the catalogue is
+ * read from Stripe; in mock mode it falls back to the hardcoded starter array
+ * below. The exported function signatures and the Product shape never change.
  */
+import type Stripe from "stripe";
+
+import { stripe } from "./stripe";
 
 export type Product = {
   id: string; // slug today, Stripe product id later e.g. "prod_..."
@@ -117,20 +119,58 @@ const FEATURED_IDS = [
   "ford-classic-oval",
 ];
 
-/** Return all active products. (Swap point: stripe.products.list) */
-export async function getProducts(): Promise<Product[]> {
-  return PRODUCTS;
+/** Map a Stripe product (with an expanded default_price) to our Product shape. */
+function fromStripe(p: Stripe.Product): Product {
+  const price = p.default_price as Stripe.Price | null;
+  return {
+    id: p.id,
+    priceId: price?.id ?? "",
+    name: p.name,
+    description: p.description ?? "",
+    image: p.images[0] ?? "/products/placeholder.jpg",
+    unitAmount: price?.unit_amount ?? 0,
+    currency: "gbp",
+    stock: Number(p.metadata.stock ?? 0),
+  };
 }
 
-/** Return a single product by id, or null. (Swap point: stripe.products.retrieve) */
+/** Return all active products. Reads Stripe in live mode, mock data otherwise. */
+export async function getProducts(): Promise<Product[]> {
+  if (!stripe) return PRODUCTS;
+
+  const res = await stripe.products.list({
+    active: true,
+    expand: ["data.default_price"],
+    limit: 100,
+  });
+  // Only sellable products (those with a usable price).
+  return res.data.map(fromStripe).filter((p) => p.priceId && p.unitAmount > 0);
+}
+
+/** Return a single product by id, or null. Reads Stripe in live mode. */
 export async function getProduct(id: string): Promise<Product | null> {
-  return PRODUCTS.find((product) => product.id === id) ?? null;
+  if (!stripe) {
+    return PRODUCTS.find((product) => product.id === id) ?? null;
+  }
+
+  try {
+    const p = await stripe.products.retrieve(id, {
+      expand: ["default_price"],
+    });
+    if (!p.active) return null;
+    return fromStripe(p);
+  } catch {
+    return null;
+  }
 }
 
 /** Return the hand-picked featured products, in display order. */
 export async function getFeaturedProducts(): Promise<Product[]> {
   const products = await getProducts();
-  return FEATURED_IDS.map((id) => products.find((p) => p.id === id)).filter(
-    (p): p is Product => Boolean(p),
-  );
+  const picked = FEATURED_IDS.map((id) =>
+    products.find((p) => p.id === id),
+  ).filter((p): p is Product => Boolean(p));
+  // In live mode the mock slugs won't match Stripe ids, so fall back to the
+  // first few products to keep the home page populated.
+  return picked.length > 0 ? picked : products.slice(0, 4);
 }

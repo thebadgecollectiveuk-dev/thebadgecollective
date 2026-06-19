@@ -13,6 +13,9 @@ import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
 type Params = { params: Promise<{ id: string }> };
 
+// Refresh product details from Stripe at most once a minute.
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const products = await getProducts();
   return products.map((product) => ({ id: product.id }));

@@ -8,6 +8,9 @@ import { Eyebrow, ChromeRule, SectionHeading } from "@/components/site/section";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/product/ProductGrid";
 
+// Refresh the featured grid from Stripe at most once a minute.
+export const revalidate = 60;
+
 const PROMISES = [
   {
     icon: BadgeCheck,

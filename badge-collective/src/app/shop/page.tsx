@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     "Browse the full collection of authentic, rare and restored car badges. Flat-rate UK shipping at £3.99.",
 };
 
+// Re-read the catalogue from Stripe at most once a minute, so edits in the
+// Stripe Dashboard appear on the site automatically without a redeploy.
+export const revalidate = 60;
+
 export default async function ShopPage() {
   const products = await getProducts();
 

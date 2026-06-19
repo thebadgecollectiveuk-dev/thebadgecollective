@@ -5,6 +5,8 @@ import { Check } from "lucide-react";
 import { Container } from "@/components/site/container";
 import { Eyebrow, ChromeRule } from "@/components/site/section";
 import { Button } from "@/components/ui/button";
+import { stripe } from "@/lib/stripe";
+import { formatGBP } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Order confirmed",
@@ -13,16 +15,34 @@ export const metadata: Metadata = {
 
 type SearchParams = { searchParams: Promise<{ session_id?: string }> };
 
+type OrderSummary = {
+  lines: { name: string; quantity: number; amount: number }[];
+  total: number;
+};
+
+async function getOrderSummary(sessionId: string): Promise<OrderSummary | null> {
+  if (!stripe) return null;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ["line_items"],
+    });
+    const lines =
+      session.line_items?.data.map((item) => ({
+        name: item.description ?? "Badge",
+        quantity: item.quantity ?? 1,
+        amount: item.amount_total ?? 0,
+      })) ?? [];
+    return { lines, total: session.amount_total ?? 0 };
+  } catch {
+    return null;
+  }
+}
+
 export default async function CheckoutSuccessPage({ searchParams }: SearchParams) {
   const { session_id } = await searchParams;
 
-  // TODO (Stripe): fetch the real order once keys are added, e.g.
-  //   const session = await stripe.checkout.sessions.retrieve(session_id, {
-  //     expand: ["line_items", "line_items.data.price.product"],
-  //   });
-  // then render the line items, totals and shipping address below.
-
   const reference = session_id ? session_id.slice(-8).toUpperCase() : null;
+  const order = session_id ? await getOrderSummary(session_id) : null;
 
   return (
     <section className="grid min-h-[70svh] place-items-center py-20">
@@ -44,6 +64,31 @@ export default async function CheckoutSuccessPage({ searchParams }: SearchParams
             Order reference{" "}
             <span className="text-foreground tabular-nums">{reference}</span>
           </p>
+        ) : null}
+        {order && order.lines.length > 0 ? (
+          <div className="mt-8 w-full max-w-sm border-t border-chrome/20 pt-6 text-left">
+            <ul className="space-y-2">
+              {order.lines.map((line, i) => (
+                <li
+                  key={i}
+                  className="flex justify-between text-sm text-muted-foreground"
+                >
+                  <span>
+                    {line.quantity} &times; {line.name}
+                  </span>
+                  <span className="tabular-nums text-foreground">
+                    {formatGBP(line.amount)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-4 flex justify-between border-t border-chrome/20 pt-4 text-sm font-medium">
+              <span className="text-foreground">Total</span>
+              <span className="tabular-nums text-foreground">
+                {formatGBP(order.total)}
+              </span>
+            </div>
+          </div>
         ) : null}
         <div className="mt-10">
           <Button asChild size="lg">
