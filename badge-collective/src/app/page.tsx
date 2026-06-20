@@ -3,6 +3,7 @@ import { BadgeCheck, RotateCcw, Truck } from "lucide-react";
 
 import { getFeaturedProducts } from "@/lib/products";
 import { Container } from "@/components/site/container";
+import { Emblem } from "@/components/site/logo";
 import { Eyebrow, ChromeRule, SectionHeading } from "@/components/site/section";
 import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/product/ProductGrid";
@@ -39,12 +40,7 @@ export default async function HomePage() {
           className="pointer-events-none absolute inset-0 grid place-items-center"
           aria-hidden="true"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo/silhouette-white.png"
-            alt=""
-            className="w-[80rem] max-w-[150vw] opacity-[0.05]"
-          />
+          <Emblem className="h-[34rem] w-[34rem] max-w-[120vw] opacity-[0.05]" />
         </div>
 
         <Container className="relative z-10 flex flex-col items-center text-center">
