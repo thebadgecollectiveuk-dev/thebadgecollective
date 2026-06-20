@@ -60,7 +60,6 @@ export function Footer() {
                 </a>
               </li>
               <li className="text-muted-foreground">United Kingdom</li>
-              <li className="text-muted-foreground">Flat-rate shipping £3.99</li>
             </ul>
           </div>
         </div>
