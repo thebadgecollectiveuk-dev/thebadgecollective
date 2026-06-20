@@ -4,7 +4,7 @@ import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 
 import { useCart, selectSubtotal, selectCount } from "@/lib/cart-store";
-import { formatGBP, SHIPPING_PENCE } from "@/lib/format";
+import { formatGBP, shippingFor } from "@/lib/format";
 import {
   Sheet,
   SheetContent,
@@ -25,7 +25,8 @@ export function CartDrawer() {
   const items = useCart((s) => s.items);
   const subtotal = useCart(selectSubtotal);
   const count = useCart(selectCount);
-  const total = subtotal + (items.length ? SHIPPING_PENCE : 0);
+  const shipping = items.length ? shippingFor(subtotal) : 0;
+  const total = subtotal + shipping;
 
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
@@ -71,7 +72,9 @@ export function CartDrawer() {
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-muted-foreground">Shipping</dt>
-                  <dd className="tabular-nums">{formatGBP(SHIPPING_PENCE)}</dd>
+                  <dd className="tabular-nums">
+                    {shipping === 0 ? "Free" : formatGBP(shipping)}
+                  </dd>
                 </div>
                 <div className="mt-1 flex justify-between border-t border-border pt-3">
                   <dt className="font-medium text-foreground">Total</dt>

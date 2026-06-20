@@ -5,7 +5,7 @@ import { ShoppingBag } from "lucide-react";
 
 import { useCart, selectSubtotal, selectCount } from "@/lib/cart-store";
 import { useHydrated } from "@/hooks/use-hydrated";
-import { formatGBP, SHIPPING_PENCE } from "@/lib/format";
+import { formatGBP, shippingFor } from "@/lib/format";
 import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,8 @@ export default function CartPage() {
   const items = useCart((s) => s.items);
   const subtotal = useCart(selectSubtotal);
   const count = useCart(selectCount);
-  const total = subtotal + (items.length ? SHIPPING_PENCE : 0);
+  const shipping = items.length ? shippingFor(subtotal) : 0;
+  const total = subtotal + shipping;
 
   return (
     <div className="py-16 sm:py-20">
@@ -80,7 +81,9 @@ export default function CartPage() {
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-muted-foreground">Shipping</dt>
-                    <dd className="tabular-nums">{formatGBP(SHIPPING_PENCE)}</dd>
+                    <dd className="tabular-nums">
+                      {shipping === 0 ? "Free" : formatGBP(shipping)}
+                    </dd>
                   </div>
                   <div className="mt-2 flex justify-between border-t border-border pt-4 text-base">
                     <dt className="font-medium text-foreground">Total</dt>
@@ -93,8 +96,8 @@ export default function CartPage() {
                   <CheckoutButton />
                 </div>
                 <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-                  Shipping calculated at a flat £3.99 across the UK. Taxes
-                  included where applicable.
+                  Free UK shipping on orders over £25, otherwise a flat £3.99.
+                  Taxes included where applicable.
                 </p>
               </div>
             </aside>

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import type { CartItem } from "./cart-store";
 import { stripe } from "./stripe";
-import { SHIPPING_PENCE } from "./format";
+import { shippingFor } from "./format";
 
 /**
  * Create a checkout session for the cart.
@@ -24,6 +24,13 @@ export async function createCheckoutSession(items: CartItem[]) {
 
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
+  // Free UK shipping once the order subtotal reaches the threshold, else flat rate.
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.unitAmount * item.quantity,
+    0,
+  );
+  const shippingAmount = shippingFor(subtotal);
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
     line_items: items.map((item) => ({
@@ -35,8 +42,9 @@ export async function createCheckoutSession(items: CartItem[]) {
       {
         shipping_rate_data: {
           type: "fixed_amount",
-          fixed_amount: { amount: SHIPPING_PENCE, currency: "gbp" },
-          display_name: "UK Standard Shipping",
+          fixed_amount: { amount: shippingAmount, currency: "gbp" },
+          display_name:
+            shippingAmount === 0 ? "Free UK Shipping" : "UK Standard Shipping",
           delivery_estimate: {
             minimum: { unit: "business_day", value: 2 },
             maximum: { unit: "business_day", value: 5 },
