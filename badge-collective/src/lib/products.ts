@@ -9,6 +9,20 @@ import type Stripe from "stripe";
 
 import { stripe } from "./stripe";
 
+/** A fixed quantity pack (e.g. 10 badges for £8.99). */
+export type PackOption = {
+  priceId: string;
+  qty: number; // number of badges in this pack
+  amount: number; // total price in pence
+};
+
+/** Per-badge "custom amount" option (e.g. £0.45/badge, minimum 101). */
+export type CustomOption = {
+  priceId: string;
+  perBadge: number; // pence per badge
+  minQty: number; // minimum quantity allowed
+};
+
 export type Product = {
   id: string; // slug today, Stripe product id later e.g. "prod_..."
   priceId: string; // placeholder today, Stripe price id later e.g. "price_..."
@@ -18,6 +32,11 @@ export type Product = {
   unitAmount: number; // in pence, e.g. 2499 = £24.99
   currency: "gbp";
   stock: number; // 0 = out of stock
+  // "packs" products are bought via a pack-size selector (set by the Stripe
+  // product metadata `pricing=packs`); otherwise a single price + quantity.
+  pricingMode?: "single" | "packs";
+  packs?: PackOption[]; // only populated by getProduct() on the detail page
+  custom?: CustomOption | null; // only populated by getProduct()
 };
 
 const PRODUCTS: Product[] = [
@@ -131,6 +150,7 @@ function fromStripe(p: Stripe.Product): Product {
     unitAmount: price?.unit_amount ?? 0,
     currency: "gbp",
     stock: Number(p.metadata.stock ?? 0),
+    pricingMode: p.metadata.pricing === "packs" ? "packs" : "single",
   };
 }
 
@@ -166,7 +186,43 @@ export async function getProduct(id: string): Promise<Product | null> {
       expand: ["default_price"],
     });
     if (!p.active) return null;
-    return fromStripe(p);
+    const product = fromStripe(p);
+
+    // For pack products, load every active price and build the tier list.
+    if (product.pricingMode === "packs") {
+      const prices = await stripe.prices.list({
+        product: id,
+        active: true,
+        limit: 100,
+      });
+      const packs: PackOption[] = [];
+      let custom: CustomOption | null = null;
+      for (const pr of prices.data) {
+        if (pr.currency !== "gbp" || !pr.unit_amount) continue;
+        const tag = pr.metadata.badge_qty;
+        if (!tag) continue;
+        if (tag === "custom") {
+          custom = {
+            priceId: pr.id,
+            perBadge: pr.unit_amount,
+            minQty: Number(pr.metadata.min_qty ?? 1),
+          };
+        } else {
+          const qty = Number(tag);
+          if (qty > 0) packs.push({ priceId: pr.id, qty, amount: pr.unit_amount });
+        }
+      }
+      packs.sort((a, b) => a.qty - b.qty);
+      product.packs = packs;
+      product.custom = custom;
+      // "From" price = the smallest pack.
+      if (packs.length > 0) {
+        product.unitAmount = packs[0].amount;
+        product.priceId = packs[0].priceId;
+      }
+    }
+
+    return product;
   } catch {
     return null;
   }

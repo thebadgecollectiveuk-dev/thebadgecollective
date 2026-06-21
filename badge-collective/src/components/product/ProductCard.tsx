@@ -53,7 +53,9 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             </Link>
           </h3>
           <p className="shrink-0 text-sm tabular-nums text-muted-foreground">
-            {formatGBP(product.unitAmount)}
+            {product.pricingMode === "packs"
+              ? `From ${formatGBP(product.unitAmount)}`
+              : formatGBP(product.unitAmount)}
           </p>
         </div>
 

@@ -16,10 +16,10 @@ type CartState = {
   items: CartItem[];
   isOpen: boolean;
   addItem: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  setQuantity: (productId: string, quantity: number) => void;
-  increment: (productId: string) => void;
-  decrement: (productId: string) => void;
+  removeItem: (priceId: string) => void;
+  setQuantity: (priceId: string, quantity: number) => void;
+  increment: (priceId: string) => void;
+  decrement: (priceId: string) => void;
   clear: () => void;
   openCart: () => void;
   closeCart: () => void;
@@ -32,13 +32,15 @@ export const useCart = create<CartState>()(
       items: [],
       isOpen: false,
 
+      // Items are keyed by priceId, so different packs of the same product
+      // (e.g. a 5-pack and a 10-pack) are tracked as separate lines.
       addItem: (item, quantity = 1) =>
         set((state) => {
-          const existing = state.items.find((i) => i.productId === item.productId);
+          const existing = state.items.find((i) => i.priceId === item.priceId);
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.productId === item.productId
+                i.priceId === item.priceId
                   ? { ...i, quantity: i.quantity + quantity }
                   : i,
               ),
@@ -47,34 +49,34 @@ export const useCart = create<CartState>()(
           return { items: [...state.items, { ...item, quantity }] };
         }),
 
-      removeItem: (productId) =>
+      removeItem: (priceId) =>
         set((state) => ({
-          items: state.items.filter((i) => i.productId !== productId),
+          items: state.items.filter((i) => i.priceId !== priceId),
         })),
 
-      setQuantity: (productId, quantity) =>
+      setQuantity: (priceId, quantity) =>
         set((state) => ({
           items: state.items
             .map((i) =>
-              i.productId === productId
+              i.priceId === priceId
                 ? { ...i, quantity: Math.max(1, Math.round(quantity)) }
                 : i,
             )
             .filter((i) => i.quantity > 0),
         })),
 
-      increment: (productId) =>
+      increment: (priceId) =>
         set((state) => ({
           items: state.items.map((i) =>
-            i.productId === productId ? { ...i, quantity: i.quantity + 1 } : i,
+            i.priceId === priceId ? { ...i, quantity: i.quantity + 1 } : i,
           ),
         })),
 
-      decrement: (productId) =>
+      decrement: (priceId) =>
         set((state) => ({
           items: state.items
             .map((i) =>
-              i.productId === productId ? { ...i, quantity: i.quantity - 1 } : i,
+              i.priceId === priceId ? { ...i, quantity: i.quantity - 1 } : i,
             )
             .filter((i) => i.quantity > 0),
         })),

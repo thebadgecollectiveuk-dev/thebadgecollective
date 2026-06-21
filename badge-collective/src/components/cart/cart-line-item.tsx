@@ -49,7 +49,7 @@ export function CartLineItem({ item, onNavigate, className }: CartLineItemProps)
           </Link>
           <button
             type="button"
-            onClick={() => removeItem(item.productId)}
+            onClick={() => removeItem(item.priceId)}
             aria-label={`Remove ${item.name} from bag`}
             className="-mr-1 -mt-1 inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-sm text-muted-foreground/70 transition-colors duration-300 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
@@ -63,8 +63,8 @@ export function CartLineItem({ item, onNavigate, className }: CartLineItemProps)
           <QuantityStepper
             size="sm"
             value={item.quantity}
-            onIncrement={() => increment(item.productId)}
-            onDecrement={() => decrement(item.productId)}
+            onIncrement={() => increment(item.priceId)}
+            onDecrement={() => decrement(item.priceId)}
             label={`Quantity for ${item.name}`}
           />
           <p className="text-sm tabular-nums text-foreground">

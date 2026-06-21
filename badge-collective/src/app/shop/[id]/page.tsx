@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
 import { AddToBag } from "@/components/product/AddToBag";
+import { PackSelector } from "@/components/product/PackSelector";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
 type Params = { params: Promise<{ id: string }> };
@@ -78,7 +79,9 @@ export default async function ProductPage({ params }: Params) {
               {product.name}
             </h1>
             <p className="mt-4 text-2xl tabular-nums text-chrome">
-              {formatGBP(product.unitAmount)}
+              {product.pricingMode === "packs"
+                ? `From ${formatGBP(product.unitAmount)}`
+                : formatGBP(product.unitAmount)}
             </p>
 
             <div className="mt-4 flex items-center gap-2 text-sm">
@@ -106,16 +109,30 @@ export default async function ProductPage({ params }: Params) {
 
             <div className="mt-9">
               {inStock ? (
-                <AddToBag
-                  product={{
-                    id: product.id,
-                    priceId: product.priceId,
-                    name: product.name,
-                    image: product.image,
-                    unitAmount: product.unitAmount,
-                    stock: product.stock,
-                  }}
-                />
+                product.pricingMode === "packs" &&
+                product.packs &&
+                product.packs.length > 0 ? (
+                  <PackSelector
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      image: product.image,
+                    }}
+                    packs={product.packs}
+                    custom={product.custom ?? null}
+                  />
+                ) : (
+                  <AddToBag
+                    product={{
+                      id: product.id,
+                      priceId: product.priceId,
+                      name: product.name,
+                      image: product.image,
+                      unitAmount: product.unitAmount,
+                      stock: product.stock,
+                    }}
+                  />
+                )
               ) : (
                 <div className="flex flex-col gap-4">
                   <p className="text-sm text-muted-foreground">
