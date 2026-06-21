@@ -40,7 +40,7 @@ export default async function HomePage() {
           className="pointer-events-none absolute inset-0 grid place-items-center"
           aria-hidden="true"
         >
-          <Emblem className="h-[34rem] w-[34rem] max-w-[120vw] opacity-[0.05]" />
+          <Emblem className="size-[34rem] max-w-[100vw] max-h-[100vw] opacity-[0.05]" />
         </div>
 
         <Container className="relative z-10 flex flex-col items-center text-center">
