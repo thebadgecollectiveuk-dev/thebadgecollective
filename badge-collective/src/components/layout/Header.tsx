@@ -51,7 +51,7 @@ export function Header() {
         )}
       >
         <Container>
-          <div className="grid h-16 grid-cols-[auto_1fr_auto] items-center sm:h-[4.5rem]">
+          <div className="relative grid h-16 grid-cols-[auto_1fr_auto] items-center sm:h-[4.5rem]">
             {/* Left: mobile menu + logo */}
             <div className="flex items-center gap-1">
               <Sheet>
@@ -85,7 +85,7 @@ export function Header() {
                 </SheetContent>
               </Sheet>
 
-              <Logo />
+              <Logo className="max-md:absolute max-md:left-1/2 max-md:top-1/2 max-md:-translate-x-1/2 max-md:-translate-y-1/2" />
             </div>
 
             {/* Centre: nav */}
