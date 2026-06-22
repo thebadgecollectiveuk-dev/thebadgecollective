@@ -16,7 +16,7 @@ export function formatGBP(pence: number): string {
 }
 
 /** Flat UK shipping rate, in pence (when the order is below the free threshold). */
-export const SHIPPING_PENCE = 399;
+export const SHIPPING_PENCE = 270;
 
 /** Order subtotal (in pence) at or above which UK shipping is free. */
 export const FREE_SHIPPING_THRESHOLD_PENCE = 2500;

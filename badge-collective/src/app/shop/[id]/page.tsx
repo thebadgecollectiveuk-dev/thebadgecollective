@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -10,6 +9,7 @@ import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
 import { AddToBag } from "@/components/product/AddToBag";
 import { PackSelector } from "@/components/product/PackSelector";
+import { ProductGallery } from "@/components/product/ProductGallery";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
 type Params = { params: Promise<{ id: string }> };
@@ -58,20 +58,16 @@ export default async function ProductPage({ params }: Params) {
         </nav>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-          {/* Image */}
-          <div className="relative overflow-hidden rounded-md border border-border bg-surface">
-            <span className="product-glow absolute inset-0" aria-hidden="true" />
-            <div className="relative aspect-square">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                priority
-                sizes="(min-width: 1024px) 560px, 100vw"
-                className={cn("object-cover", !inStock && "opacity-50 grayscale")}
-              />
-            </div>
-          </div>
+          {/* Image gallery */}
+          <ProductGallery
+            images={
+              product.images && product.images.length > 0
+                ? product.images
+                : [product.image]
+            }
+            name={product.name}
+            inStock={inStock}
+          />
 
           {/* Details */}
           <div className="flex flex-col">
@@ -120,6 +116,7 @@ export default async function ProductPage({ params }: Params) {
                     }}
                     packs={product.packs}
                     custom={product.custom ?? null}
+                    stock={product.stock}
                   />
                 ) : (
                   <AddToBag

@@ -4,7 +4,7 @@ export const SITE = {
   email: "thebadgecollectiveuk@gmail.com",
   domain: "thebadgecollective.com",
   region: "United Kingdom",
-  shipping: "£3.99 flat UK",
+  shipping: "£2.70 flat UK",
 } as const;
 
 // WhatsApp number comes from the environment. wa.me wants digits only, so we

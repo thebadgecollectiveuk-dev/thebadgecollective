@@ -8,7 +8,7 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 export const metadata: Metadata = {
   title: "Shop",
   description:
-    "Browse the full collection of authentic, rare and restored car badges. Flat-rate UK shipping at £3.99.",
+    "Browse the full collection of authentic, rare and restored car badges. Flat-rate UK shipping at £2.70.",
 };
 
 // Re-read the catalogue from Stripe at most once a minute, so edits in the

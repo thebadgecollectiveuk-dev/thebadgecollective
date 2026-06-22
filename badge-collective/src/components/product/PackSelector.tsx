@@ -13,25 +13,38 @@ type PackSelectorProps = {
   product: { id: string; name: string; image: string };
   packs: PackOption[];
   custom: CustomOption | null;
+  stock: number; // total badges available
 };
 
-export function PackSelector({ product, packs, custom }: PackSelectorProps) {
+export function PackSelector({ product, packs, custom, stock }: PackSelectorProps) {
   const addItem = useCart((s) => s.addItem);
   const openCart = useCart((s) => s.openCart);
 
-  // Selection is a pack priceId, or the literal "custom".
+  // A pack can only be ordered if there are enough badges in stock for it.
+  const packAvailable = (p: PackOption) => p.qty <= stock;
+  const customAvailable = custom != null && stock >= custom.minQty;
+  const firstAvailable = packs.find(packAvailable);
+  const minQty = custom?.minQty ?? 1;
+
   const [selected, setSelected] = React.useState<string>(
-    packs[0]?.priceId ?? "custom",
+    firstAvailable?.priceId ?? (customAvailable ? "custom" : ""),
   );
-  const [customQty, setCustomQty] = React.useState<number>(custom?.minQty ?? 1);
+  const [customQty, setCustomQty] = React.useState<number>(minQty);
   const [added, setAdded] = React.useState(false);
   const timer = React.useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   React.useEffect(() => () => clearTimeout(timer.current), []);
 
   const isCustom = selected === "custom";
   const selectedPack = packs.find((p) => p.priceId === selected) ?? null;
-  const minQty = custom?.minQty ?? 1;
-  const effectiveQty = Math.max(minQty, Math.floor(customQty) || minQty);
+  // Clamp the custom amount between its minimum and the available stock.
+  const effectiveQty = Math.min(
+    stock,
+    Math.max(minQty, Math.floor(customQty) || minQty),
+  );
+
+  const canAdd = isCustom
+    ? customAvailable
+    : selectedPack != null && packAvailable(selectedPack);
 
   const lineTotal = isCustom
     ? custom
@@ -40,6 +53,7 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
     : selectedPack?.amount ?? 0;
 
   const handleAdd = () => {
+    if (!canAdd) return;
     if (isCustom && custom) {
       addItem(
         {
@@ -62,8 +76,6 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
         },
         1,
       );
-    } else {
-      return;
     }
     openCart();
     setAdded(true);
@@ -73,7 +85,7 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
 
   const optionClass = (active: boolean) =>
     cn(
-      "flex flex-col items-center gap-0.5 rounded-md border px-3 py-3 text-center transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+      "flex flex-col items-center gap-0.5 rounded-md border px-3 py-3 text-center transition-colors duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-30",
       active
         ? "border-chrome bg-surface text-foreground"
         : "border-border text-muted-foreground hover:border-chrome/50",
@@ -84,18 +96,25 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
       <div>
         <p className="label-caps mb-3 text-muted-foreground/70">Choose quantity</p>
         <div className="grid grid-cols-3 gap-2">
-          {packs.map((p) => (
-            <button
-              key={p.priceId}
-              type="button"
-              onClick={() => setSelected(p.priceId)}
-              className={optionClass(selected === p.priceId)}
-            >
-              <span className="text-base font-medium text-foreground">{p.qty}</span>
-              <span className="text-xs tabular-nums">{formatGBP(p.amount)}</span>
-            </button>
-          ))}
-          {custom ? (
+          {packs.map((p) => {
+            const available = packAvailable(p);
+            return (
+              <button
+                key={p.priceId}
+                type="button"
+                disabled={!available}
+                onClick={() => setSelected(p.priceId)}
+                title={available ? undefined : "Not enough stock"}
+                className={optionClass(selected === p.priceId)}
+              >
+                <span className="text-base font-medium text-foreground">{p.qty}</span>
+                <span className="text-xs tabular-nums">
+                  {available ? formatGBP(p.amount) : "Out of stock"}
+                </span>
+              </button>
+            );
+          })}
+          {customAvailable ? (
             <button
               type="button"
               onClick={() => setSelected("custom")}
@@ -103,7 +122,7 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
             >
               <span className="text-base font-medium text-foreground">Custom</span>
               <span className="text-xs tabular-nums">
-                {formatGBP(custom.perBadge)}/ea
+                {formatGBP(custom!.perBadge)}/ea
               </span>
             </button>
           ) : null}
@@ -113,13 +132,14 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
       {isCustom && custom ? (
         <div className="flex flex-col gap-2">
           <label htmlFor="custom-qty" className="text-sm text-muted-foreground">
-            Number of badges (minimum {custom.minQty})
+            Number of badges ({custom.minQty}&ndash;{stock} available)
           </label>
           <input
             id="custom-qty"
             type="number"
             inputMode="numeric"
             min={custom.minQty}
+            max={stock}
             value={customQty}
             onChange={(e) => setCustomQty(Number(e.target.value))}
             onBlur={() => setCustomQty(effectiveQty)}
@@ -137,7 +157,7 @@ export function PackSelector({ product, packs, custom }: PackSelectorProps) {
         </span>
       </div>
 
-      <Button size="lg" onClick={handleAdd} aria-live="polite">
+      <Button size="lg" onClick={handleAdd} disabled={!canAdd} aria-live="polite">
         {added ? (
           <>
             <Check />

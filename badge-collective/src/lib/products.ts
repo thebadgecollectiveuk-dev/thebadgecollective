@@ -28,7 +28,8 @@ export type Product = {
   priceId: string; // placeholder today, Stripe price id later e.g. "price_..."
   name: string;
   description: string;
-  image: string; // path under /public/products/
+  image: string; // primary image (first one)
+  images?: string[]; // all images, for the product gallery
   unitAmount: number; // in pence, e.g. 2499 = £24.99
   currency: "gbp";
   stock: number; // 0 = out of stock
@@ -147,6 +148,7 @@ function fromStripe(p: Stripe.Product): Product {
     name: p.name,
     description: p.description ?? "",
     image: p.images[0] ?? "/products/placeholder.jpg",
+    images: p.images ?? [],
     unitAmount: price?.unit_amount ?? 0,
     currency: "gbp",
     stock: Number(p.metadata.stock ?? 0),
