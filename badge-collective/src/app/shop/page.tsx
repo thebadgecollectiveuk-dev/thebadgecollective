@@ -8,7 +8,7 @@ import { ProductGrid } from "@/components/product/ProductGrid";
 export const metadata: Metadata = {
   title: "Shop",
   description:
-    "Browse the full collection of authentic, rare and restored car badges. Flat-rate UK shipping at £2.70.",
+    "Browse the full collection of premium, brand new car badges. Flat-rate UK shipping at £2.70.",
 };
 
 // Re-read the catalogue from Stripe at most once a minute, so edits in the
@@ -28,8 +28,8 @@ export default async function ShopPage() {
           </h1>
           <ChromeRule className="max-w-[140px]" />
           <p className="max-w-xl text-base leading-relaxed text-muted-foreground">
-            {products.length} badges in the current collection. Cleaned, checked
-            and ready to fit.
+            {products.length} badges in the current collection. Brand new and
+            ready to fit.
           </p>
         </header>
 

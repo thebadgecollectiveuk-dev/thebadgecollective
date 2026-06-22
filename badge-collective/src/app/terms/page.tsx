@@ -18,9 +18,9 @@ export default function TermsPage() {
 
       <h2>Products</h2>
       <p>
-        We sell authentic, rare and restored car badges. We describe each badge as
-        accurately as we can and note whether it is original or restored. Colours
-        and finishes may vary slightly from photographs.
+        We sell premium, brand new car badges. We describe each badge as
+        accurately as we can. Colours and finishes may vary slightly from
+        photographs.
       </p>
 
       <h2>Pricing and orders</h2>

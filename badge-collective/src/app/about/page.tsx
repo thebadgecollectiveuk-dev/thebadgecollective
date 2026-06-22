@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "The Badge Collective sources, restores and collects authentic car badges for enthusiasts across the UK.",
+    "The Badge Collective offers premium, brand new car badges for enthusiasts across the UK.",
 };
 
 export default function AboutPage() {
@@ -30,24 +30,21 @@ export default function AboutPage() {
         */}
         <div className="mt-10 flex flex-col gap-6 text-base leading-relaxed text-muted-foreground">
           <p>
-            The Badge Collective began with a simple frustration. The right badge
-            is hard to find, and harder to find in the condition it deserves. We
-            spent years tracking down emblems for our own cars, learning which
-            were authentic, which had been reproduced, and which were worth the
-            effort to restore.
+            The Badge Collective began with a simple goal: premium, brand new car
+            badges, done properly. We were tired of poor-quality emblems and
+            wanted badges that look and fit exactly as they should, straight out
+            of the packet.
           </p>
           <p>
-            Today we do that work for other enthusiasts. Every badge is sourced
-            with care, cleaned and checked, and photographed honestly so you know
-            exactly what you are buying. Some are original survivors. Others are
-            restored to a standard that suits a careful build. We tell you which
-            is which.
+            Today we offer that quality to other enthusiasts. Every badge is brand
+            new, quality checked, and photographed honestly so you know exactly
+            what you are buying. No surprises, no compromises.
           </p>
           <p>
             We are a small operation, and we like it that way. It means we can
-            answer your questions, hunt down a marque you have been chasing, and
-            stand behind everything we sell. If you cannot find what you are
-            looking for, send us a message. There is a good chance we can help.
+            answer your questions, help you find the right badge, and stand behind
+            everything we sell. If you cannot find what you are looking for, send
+            us a message. There is a good chance we can help.
           </p>
         </div>
 

@@ -25,8 +25,8 @@ export function Footer() {
           <div className="flex flex-col gap-5">
             <Logo />
             <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Authentic, rare and restored car badges for the enthusiast.
-              Sourced with care and shipped across the United Kingdom.
+              Premium, brand new car badges for the enthusiast. Shipped with
+              care across the United Kingdom.
             </p>
           </div>
 

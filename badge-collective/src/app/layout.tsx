@@ -23,18 +23,18 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://thebadgecollective.
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "The Badge Collective: Authentic, Rare, Restored Car Badges",
+    default: "The Badge Collective: Premium Brand New Car Badges",
     template: "%s · The Badge Collective",
   },
   description:
-    "Premium car badges for the enthusiast. Authentic, rare and restored marques, sourced and shipped across the UK.",
+    "Premium, brand new car badges for the enthusiast, shipped across the UK.",
   keywords: [
     "car badges",
     "automotive badges",
     "BMW roundel",
     "Mercedes badge",
-    "classic car emblems",
-    "restored car badges",
+    "car emblems",
+    "new car badges",
     "UK",
   ],
   openGraph: {
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "The Badge Collective",
     title: "The Badge Collective",
     description:
-      "Premium car badges for the enthusiast. Authentic, rare and restored.",
+      "Premium, brand new car badges for the enthusiast.",
     url: siteUrl,
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "The Badge Collective" }],
   },
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Badge Collective",
     description:
-      "Premium car badges for the enthusiast. Authentic, rare and restored.",
+      "Premium, brand new car badges for the enthusiast.",
     images: ["/og.jpg"],
   },
   robots: { index: true, follow: true },

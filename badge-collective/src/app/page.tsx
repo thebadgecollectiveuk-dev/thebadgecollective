@@ -44,14 +44,14 @@ export default async function HomePage() {
         </div>
 
         <Container className="relative z-10 flex flex-col items-center text-center">
-          <Eyebrow className="text-muted-foreground">Authentic. Rare. Restored.</Eyebrow>
+          <Eyebrow className="text-muted-foreground">Authentic. Premium. Brand New.</Eyebrow>
           <h1 className="mt-7 font-serif text-5xl font-medium leading-[1.05] tracking-tight text-chrome sm:text-7xl lg:text-8xl">
             The Badge Collective
           </h1>
           <ChromeRule className="mt-8 max-w-[180px]" />
           <p className="mt-8 max-w-xl text-balance text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Premium car badges for the enthusiast. Sourced, restored and shipped
-            across the United Kingdom.
+            Premium, brand new car badges for the enthusiast. Shipped across the
+            United Kingdom.
           </p>
           <div className="mt-10">
             <Button asChild size="lg">
@@ -67,7 +67,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="The Collection"
             title="Featured badges"
-            intro="A small, hand-picked selection from the current collection. Each one cleaned, checked and ready to fit."
+            intro="A small, hand-picked selection from the current collection. Each one brand new and ready to fit."
           />
           <div className="mt-16">
             <ProductGrid products={featured} />
@@ -107,10 +107,9 @@ export default async function HomePage() {
             Built by enthusiasts, for enthusiasts
           </h2>
           <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-            We started with a simple frustration: the right badge is hard to
-            find, and harder to find in good condition. So we began sourcing,
-            restoring and collecting the marques we love, and offering them to
-            people who care about the details.
+            We set out to do one thing well: premium, brand new car badges,
+            finished to a high standard and quality checked before they ship.
+            Made for people who care about the details.
           </p>
           <div className="mt-9">
             <Button asChild variant="ghost">
