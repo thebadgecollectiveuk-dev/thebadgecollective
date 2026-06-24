@@ -24,8 +24,8 @@ const PROMISES = [
   },
   {
     icon: RotateCcw,
-    title: "7-Day Returns",
-    body: "Seven days to return an unused badge in its original condition.",
+    title: "14-Day Returns",
+    body: "Fourteen days to return an unused badge in its original condition.",
   },
 ];
 
