@@ -72,10 +72,16 @@ export default async function HomePage() {
           <div className="mt-16">
             <ProductGrid products={featured} />
           </div>
-          <div className="mt-16 flex justify-center">
+          <div className="mt-16 flex flex-col items-center gap-8">
             <Button asChild variant="outline" size="lg">
               <Link href="/shop">View all badges</Link>
             </Button>
+            <div className="flex flex-col items-center gap-2 text-center">
+              <p className="font-serif text-xl text-chrome sm:text-2xl">
+                This is just the beginning
+              </p>
+              <p className="label-caps text-muted-foreground/70">More coming soon</p>
+            </div>
           </div>
         </Container>
       </section>
