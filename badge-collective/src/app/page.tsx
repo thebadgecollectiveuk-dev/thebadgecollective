@@ -44,6 +44,10 @@ export default async function HomePage() {
         </div>
 
         <Container className="relative z-10 flex flex-col items-center text-center">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-chrome/30 bg-surface/50 px-4 py-1.5">
+            <span className="size-1.5 animate-pulse rounded-full bg-chrome" aria-hidden="true" />
+            <span className="label-caps text-chrome">More coming soon</span>
+          </div>
           <Eyebrow className="text-muted-foreground">Authentic. Premium. Brand New.</Eyebrow>
           <h1 className="mt-7 font-serif text-5xl font-medium leading-[1.05] tracking-tight text-chrome sm:text-7xl lg:text-8xl">
             The Badge Collective
@@ -72,16 +76,10 @@ export default async function HomePage() {
           <div className="mt-16">
             <ProductGrid products={featured} />
           </div>
-          <div className="mt-16 flex flex-col items-center gap-8">
+          <div className="mt-16 flex justify-center">
             <Button asChild variant="outline" size="lg">
               <Link href="/shop">View all badges</Link>
             </Button>
-            <div className="flex flex-col items-center gap-2 text-center">
-              <p className="font-serif text-xl text-chrome sm:text-2xl">
-                This is just the beginning
-              </p>
-              <p className="label-caps text-muted-foreground/70">More coming soon</p>
-            </div>
           </div>
         </Container>
       </section>
