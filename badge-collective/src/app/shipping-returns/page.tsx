@@ -32,7 +32,13 @@ export default function ShippingReturnsPage() {
       </p>
       <ul>
         <li>Contact us first so we can confirm your return and the address.</li>
-        <li>Return postage is paid by the buyer.</li>
+        <li>
+          <strong>
+            You are responsible for the cost of return shipping
+          </strong>{" "}
+          for change-of-mind returns. We only cover return postage when an item
+          is faulty, damaged or not as described.
+        </li>
         <li>
           We recommend a tracked service, as we cannot refund items that do not
           reach us.
