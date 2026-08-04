@@ -69,9 +69,10 @@ export default function ShippingReturnsPage() {
 
       <h2>Faulty or incorrect items</h2>
       <p>
-        If something arrives damaged or not as described, message us within 14
-        days and we will put it right, either with a replacement or a full
-        refund including postage.
+        If an item arrives damaged, faulty, not as described, or we have sent you
+        the wrong item by mistake, message us within 14 days and we will put it
+        right with a replacement or a full refund, including postage. In these
+        cases <strong>we cover the cost of return shipping</strong>.
       </p>
 
       <h2>Questions</h2>
