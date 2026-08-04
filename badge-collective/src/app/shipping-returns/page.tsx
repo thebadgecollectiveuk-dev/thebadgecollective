@@ -50,6 +50,23 @@ export default function ShippingReturnsPage() {
         are non-refundable unless the item arrived faulty or incorrect.
       </p>
 
+      <h2>Ordering the correct size</h2>
+      <p>
+        <strong>
+          Choosing the correct badge and size is your responsibility.
+        </strong>{" "}
+        Please check the dimensions and measure your existing badges before
+        ordering to make sure they are compatible. We are not liable for badges
+        ordered in the wrong size or for the wrong vehicle.
+      </p>
+      <p>
+        A wrong-size or change-of-mind order is treated as a standard return
+        under the 14 days above: the badge must be unused and in its original
+        condition, and you are responsible for the cost of return shipping. This
+        does not affect your rights where an item is faulty, damaged or not as
+        described.
+      </p>
+
       <h2>Faulty or incorrect items</h2>
       <p>
         If something arrives damaged or not as described, message us within 14
