@@ -14,7 +14,7 @@ export const revalidate = 60;
 const PROMISES = [
   {
     icon: BadgeCheck,
-    title: "Authentic Badges",
+    title: "Quality Checked",
     body: "Every badge is checked and verified before it leaves us.",
   },
   {
@@ -48,7 +48,7 @@ export default async function HomePage() {
             <span className="size-1.5 animate-pulse rounded-full bg-chrome" aria-hidden="true" />
             <span className="label-caps text-chrome">More coming soon</span>
           </div>
-          <Eyebrow className="text-muted-foreground">Authentic. Premium. Brand New.</Eyebrow>
+          <Eyebrow className="text-muted-foreground">Premium. Quality. Brand New.</Eyebrow>
           <h1 className="mt-7 font-serif text-5xl font-medium leading-[1.05] tracking-tight text-chrome sm:text-7xl lg:text-8xl">
             The Badge Collective
           </h1>
