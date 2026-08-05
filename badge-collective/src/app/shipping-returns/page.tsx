@@ -5,7 +5,7 @@ import { LegalPage } from "@/components/site/legal-page";
 export const metadata: Metadata = {
   title: "Shipping & Returns",
   description:
-    "Flat-rate UK shipping at £2.70, dispatched within two working days. 14-day returns on unused badges in original condition.",
+    "Flat-rate UK shipping at £3.65 via Royal Mail, 2 to 3 working day delivery aim. 14-day returns on unused badges in original condition.",
 };
 
 // Template content. Owner: review against your final policy before launch.
@@ -14,9 +14,10 @@ export default function ShippingReturnsPage() {
     <LegalPage title="Shipping & Returns" updated="June 2026">
       <h2>Shipping</h2>
       <p>
-        We ship across the United Kingdom at a <strong>flat rate of £2.70</strong>{" "}
-        per order. Orders are dispatched within <strong>two working days</strong>,
-        and most arrive within two to five working days of dispatch.
+        We ship across the United Kingdom via <strong>Royal Mail</strong> at a{" "}
+        <strong>flat rate of £3.65</strong> per order, free on orders over £25.
+        Orders are dispatched within <strong>two working days</strong>, with a
+        delivery aim of <strong>2 to 3 working days</strong>.
       </p>
       <p>
         You will receive an email confirmation when your order is placed, and a

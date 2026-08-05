@@ -96,8 +96,8 @@ export default function CartPage() {
                   <CheckoutButton />
                 </div>
                 <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-                  Free UK shipping on orders over £25, otherwise a flat £2.70.
-                  Taxes included where applicable.
+                  Free UK shipping on orders over £25, otherwise a flat £3.65 via
+                  Royal Mail. Taxes included where applicable.
                 </p>
               </div>
             </aside>

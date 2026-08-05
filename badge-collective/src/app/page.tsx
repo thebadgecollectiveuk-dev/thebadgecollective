@@ -20,7 +20,7 @@ const PROMISES = [
   {
     icon: Truck,
     title: "Free UK Shipping over £25",
-    body: "Free delivery on orders over £25, otherwise a flat £2.70. Dispatched within two working days.",
+    body: "Free over £25, otherwise a flat £3.65 via Royal Mail, with a 2 to 3 working day delivery aim.",
   },
   {
     icon: RotateCcw,

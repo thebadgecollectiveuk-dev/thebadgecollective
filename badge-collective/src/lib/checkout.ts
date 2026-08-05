@@ -44,10 +44,10 @@ export async function createCheckoutSession(items: CartItem[]) {
           type: "fixed_amount",
           fixed_amount: { amount: shippingAmount, currency: "gbp" },
           display_name:
-            shippingAmount === 0 ? "Free UK Shipping" : "UK Standard Shipping",
+            shippingAmount === 0 ? "Free UK Shipping" : "Royal Mail Standard",
           delivery_estimate: {
             minimum: { unit: "business_day", value: 2 },
-            maximum: { unit: "business_day", value: 5 },
+            maximum: { unit: "business_day", value: 3 },
           },
         },
       },
