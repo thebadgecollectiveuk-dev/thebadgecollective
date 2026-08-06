@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/layout/CartDrawer";
@@ -65,6 +66,7 @@ export default function RootLayout({
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <div className="grain" aria-hidden="true" />
         <div className="relative z-10 flex min-h-dvh flex-col">
+          <AnnouncementBar />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
