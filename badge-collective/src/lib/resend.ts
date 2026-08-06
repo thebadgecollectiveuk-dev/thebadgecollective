@@ -84,7 +84,7 @@ export async function sendOrderEmails(order: OrderEmail): Promise<void> {
       to: order.customerEmail,
       subject: `Your ${SITE.name} order is confirmed`,
       html:
-        `<p>Thank you for your order. Your badges will be dispatched within two working days.</p>` +
+        `<p>Thank you for your order. Your badges will be dispatched within 1 to 3 working days.</p>` +
         html,
     });
   }

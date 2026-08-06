@@ -57,7 +57,7 @@ export default async function CheckoutSuccessPage({ searchParams }: SearchParams
         <ChromeRule className="mt-7 max-w-[140px]" />
         <p className="mt-7 max-w-md text-base leading-relaxed text-muted-foreground">
           We&apos;ve received your order and a confirmation email is on its way.
-          Your badges will be dispatched within two working days.
+          Your badges will be dispatched within 1 to 3 working days.
         </p>
         {reference ? (
           <p className="mt-6 text-sm text-muted-foreground">
