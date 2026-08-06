@@ -55,6 +55,13 @@ export async function createCheckoutSession(items: CartItem[]) {
     success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/cart`,
     automatic_tax: { enabled: false },
+    payment_method_options: {
+      card: {
+        restrictions: {
+          brands_blocked: ["american_express"],
+        },
+      },
+    },
   });
 
   // redirect() throws internally, so this must sit outside any try/catch.
