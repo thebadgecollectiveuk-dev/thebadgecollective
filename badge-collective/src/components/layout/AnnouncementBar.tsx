@@ -11,7 +11,7 @@ export function AnnouncementBar() {
     "Hi Badge Collective, I'm interested in a bulk order. ",
   );
   const linkClass =
-    "font-medium text-chrome underline-offset-4 hover:underline focus-visible:outline-none focus-visible:underline";
+    "font-medium text-chrome underline underline-offset-4 decoration-chrome/60 transition-colors hover:text-foreground hover:decoration-foreground focus-visible:outline-none";
 
   return (
     <div className="border-b border-border bg-surface/60">
@@ -24,11 +24,11 @@ export function AnnouncementBar() {
             rel="noopener noreferrer"
             className={linkClass}
           >
-            Message us privately for custom pricing
+            Message us privately for custom pricing &mdash; click here &rarr;
           </a>
         ) : (
           <Link href="/contact?subject=Bulk%20order" className={linkClass}>
-            Contact us privately for custom pricing
+            Contact us privately for custom pricing &mdash; click here &rarr;
           </Link>
         )}
       </p>
