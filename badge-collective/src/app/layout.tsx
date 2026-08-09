@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: "%s · The Badge Collective",
   },
   description:
-    "Premium, brand new car badges for the enthusiast, shipped across the UK.",
+    "Premium, brand new car badges for the enthusiast. Shipped across the UK with free delivery on orders over £100.",
   keywords: [
     "car badges",
     "automotive badges",
