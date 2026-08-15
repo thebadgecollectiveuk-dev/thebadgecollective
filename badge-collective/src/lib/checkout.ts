@@ -44,7 +44,9 @@ export async function createCheckoutSession(items: CartItem[]) {
           type: "fixed_amount",
           fixed_amount: { amount: shippingAmount, currency: "gbp" },
           display_name:
-            shippingAmount === 0 ? "Free UK Shipping" : "Royal Mail Standard",
+            shippingAmount === 0
+              ? "Free UK Shipping"
+              : "Royal Mail Postage & Packaging",
           delivery_estimate: {
             minimum: { unit: "business_day", value: 2 },
             maximum: { unit: "business_day", value: 3 },

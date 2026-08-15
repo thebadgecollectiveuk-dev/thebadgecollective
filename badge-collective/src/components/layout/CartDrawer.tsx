@@ -71,7 +71,7 @@ export function CartDrawer() {
                   <dd className="tabular-nums">{formatGBP(subtotal)}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Shipping</dt>
+                  <dt className="text-muted-foreground">Postage &amp; packaging</dt>
                   <dd className="tabular-nums">
                     {shipping === 0 ? "Free" : formatGBP(shipping)}
                   </dd>

@@ -80,7 +80,9 @@ export default function CartPage() {
                     <dd className="tabular-nums">{formatGBP(subtotal)}</dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-muted-foreground">Shipping</dt>
+                    <dt className="text-muted-foreground">
+                      Postage &amp; packaging
+                    </dt>
                     <dd className="tabular-nums">
                       {shipping === 0 ? "Free" : formatGBP(shipping)}
                     </dd>
@@ -96,8 +98,8 @@ export default function CartPage() {
                   <CheckoutButton />
                 </div>
                 <p className="mt-4 text-center text-xs leading-relaxed text-muted-foreground">
-                  Free UK shipping on orders over £100, otherwise a flat £3.99 via
-                  Royal Mail. Taxes included where applicable.
+                  Free on orders over £100, otherwise a flat £3.99 for postage
+                  &amp; packaging via Royal Mail. Taxes included where applicable.
                 </p>
               </div>
             </aside>
