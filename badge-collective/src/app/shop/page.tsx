@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import { getProducts } from "@/lib/products";
 import { Container } from "@/components/site/container";
 import { Eyebrow, ChromeRule } from "@/components/site/section";
 import { ProductGrid } from "@/components/product/ProductGrid";
+import { ShopBrowser } from "@/components/product/ShopBrowser";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -33,8 +35,12 @@ export default async function ShopPage() {
           </p>
         </header>
 
-        <div className="mt-16">
-          <ProductGrid products={products} priorityCount={3} />
+        <div className="mt-12">
+          <Suspense
+            fallback={<ProductGrid products={products} priorityCount={3} />}
+          >
+            <ShopBrowser products={products} />
+          </Suspense>
         </div>
       </Container>
     </div>

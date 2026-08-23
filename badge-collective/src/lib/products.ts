@@ -8,6 +8,7 @@
 import type Stripe from "stripe";
 
 import { stripe } from "./stripe";
+import { brandForName } from "./brands";
 
 /** A fixed quantity pack (e.g. 10 badges for £8.99). */
 export type PackOption = {
@@ -33,6 +34,7 @@ export type Product = {
   unitAmount: number; // in pence, e.g. 2499 = £24.99
   currency: "gbp";
   stock: number; // 0 = out of stock
+  brand?: string | null; // brand slug derived from the title, for filtering
   // "packs" products are bought via a pack-size selector (set by the Stripe
   // product metadata `pricing=packs`); otherwise a single price + quantity.
   pricingMode?: "single" | "packs";
@@ -152,6 +154,7 @@ function fromStripe(p: Stripe.Product): Product {
     unitAmount: price?.unit_amount ?? 0,
     currency: "gbp",
     stock: Number(p.metadata.stock ?? 0),
+    brand: brandForName(p.name),
     pricingMode: p.metadata.pricing === "packs" ? "packs" : "single",
   };
 }

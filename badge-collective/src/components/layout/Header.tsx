@@ -10,6 +10,7 @@ import { useCart, selectCount } from "@/lib/cart-store";
 import { useHydrated } from "@/hooks/use-hydrated";
 import { Logo } from "@/components/site/logo";
 import { Container } from "@/components/site/container";
+import { BRANDS } from "@/lib/brands";
 import {
   Sheet,
   SheetContent,
@@ -81,6 +82,20 @@ export function Header() {
                         </Link>
                       </SheetClose>
                     ))}
+
+                    <p className="mt-5 px-4 text-xs uppercase tracking-[0.2em] text-muted-foreground/50">
+                      Shop by brand
+                    </p>
+                    {BRANDS.map((b) => (
+                      <SheetClose asChild key={b.slug}>
+                        <Link
+                          href={`/shop?brand=${b.slug}`}
+                          className="rounded-sm px-4 py-2 text-base text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                        >
+                          {b.label}
+                        </Link>
+                      </SheetClose>
+                    ))}
                   </nav>
                 </SheetContent>
               </Sheet>
@@ -90,7 +105,44 @@ export function Header() {
 
             {/* Centre: nav */}
             <nav className="hidden items-center justify-center gap-10 md:flex">
-              {NAV.map((item) => (
+              {/* Shop, with a brand dropdown */}
+              <div className="group relative">
+                <Link
+                  href="/shop"
+                  className={cn(
+                    "label-caps relative py-1 transition-colors duration-300",
+                    isActive("/shop")
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  Shop
+                  {isActive("/shop") ? (
+                    <span className="chrome-fill absolute inset-x-0 -bottom-0.5 h-px" />
+                  ) : null}
+                </Link>
+                <div className="invisible absolute left-1/2 top-full z-50 -translate-x-1/2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <div className="min-w-[12rem] rounded-md border border-border bg-background/95 p-2 shadow-xl backdrop-blur-md">
+                    <Link
+                      href="/shop"
+                      className="block rounded-sm px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:bg-surface hover:text-foreground"
+                    >
+                      All badges
+                    </Link>
+                    {BRANDS.map((b) => (
+                      <Link
+                        key={b.slug}
+                        href={`/shop?brand=${b.slug}`}
+                        className="block rounded-sm px-3 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:bg-surface hover:text-foreground"
+                      >
+                        {b.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {NAV.filter((item) => item.href !== "/shop").map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
