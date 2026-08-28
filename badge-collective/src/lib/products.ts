@@ -24,6 +24,15 @@ export type CustomOption = {
   minQty: number; // minimum quantity allowed
 };
 
+/** A fitment / size variant the customer must pick (e.g. 56mm vs 68mm). */
+export type FitmentOption = {
+  priceId: string;
+  label: string; // e.g. "56mm"
+  amount: number; // total price in pence
+  stock: number;
+  includes?: string; // what's in the box, for this fitment
+};
+
 export type Product = {
   id: string; // slug today, Stripe product id later e.g. "prod_..."
   priceId: string; // placeholder today, Stripe price id later e.g. "price_..."
@@ -35,11 +44,12 @@ export type Product = {
   currency: "gbp";
   stock: number; // 0 = out of stock
   brand?: string | null; // brand slug derived from the title, for filtering
-  // "packs" products are bought via a pack-size selector (set by the Stripe
-  // product metadata `pricing=packs`); otherwise a single price + quantity.
-  pricingMode?: "single" | "packs";
+  // Set by the Stripe product metadata `pricing`: "packs" (pack-size selector),
+  // "fitment" (size/variant the customer must pick), otherwise single price.
+  pricingMode?: "single" | "packs" | "fitment";
   packs?: PackOption[]; // only populated by getProduct() on the detail page
   custom?: CustomOption | null; // only populated by getProduct()
+  fitments?: FitmentOption[]; // only populated by getProduct()
 };
 
 const PRODUCTS: Product[] = [
@@ -155,7 +165,12 @@ function fromStripe(p: Stripe.Product): Product {
     currency: "gbp",
     stock: Number(p.metadata.stock ?? 0),
     brand: brandForName(p.name),
-    pricingMode: p.metadata.pricing === "packs" ? "packs" : "single",
+    pricingMode:
+      p.metadata.pricing === "packs"
+        ? "packs"
+        : p.metadata.pricing === "fitment"
+          ? "fitment"
+          : "single",
   };
 }
 
@@ -224,6 +239,34 @@ export async function getProduct(id: string): Promise<Product | null> {
       if (packs.length > 0) {
         product.unitAmount = packs[0].amount;
         product.priceId = packs[0].priceId;
+      }
+    }
+
+    // For fitment products, load the size variants (e.g. 56mm / 68mm).
+    if (product.pricingMode === "fitment") {
+      const prices = await stripe.prices.list({
+        product: id,
+        active: true,
+        limit: 100,
+      });
+      const fitments: FitmentOption[] = [];
+      for (const pr of prices.data) {
+        if (pr.currency !== "gbp" || !pr.unit_amount) continue;
+        const label = pr.metadata.fitment;
+        if (!label) continue;
+        fitments.push({
+          priceId: pr.id,
+          label,
+          amount: pr.unit_amount,
+          stock: Number(pr.metadata.stock ?? product.stock),
+          includes: pr.metadata.includes ?? undefined,
+        });
+      }
+      fitments.sort((a, b) => parseInt(a.label) - parseInt(b.label));
+      product.fitments = fitments;
+      if (fitments.length > 0) {
+        product.unitAmount = fitments[0].amount;
+        product.priceId = fitments[0].priceId;
       }
     }
 

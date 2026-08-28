@@ -9,6 +9,7 @@ import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
 import { AddToBag } from "@/components/product/AddToBag";
 import { PackSelector } from "@/components/product/PackSelector";
+import { FitmentSelector } from "@/components/product/FitmentSelector";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 
@@ -117,6 +118,17 @@ export default async function ProductPage({ params }: Params) {
                     packs={product.packs}
                     custom={product.custom ?? null}
                     stock={product.stock}
+                  />
+                ) : product.pricingMode === "fitment" &&
+                  product.fitments &&
+                  product.fitments.length > 0 ? (
+                  <FitmentSelector
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      image: product.image,
+                    }}
+                    fitments={product.fitments}
                   />
                 ) : (
                   <AddToBag
