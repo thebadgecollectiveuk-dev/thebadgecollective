@@ -10,6 +10,9 @@ export const BRANDS: Brand[] = [
   { slug: "mercedes", label: "Mercedes", keywords: ["mercedes", "amg"] },
   { slug: "lamborghini", label: "Lamborghini", keywords: ["lamborghini", "lambo"] },
   { slug: "audi", label: "Audi", keywords: ["audi"] },
+  { slug: "porsche", label: "Porsche", keywords: ["porsche"] },
+  { slug: "mini", label: "MINI", keywords: ["mini"] },
+  { slug: "volkswagen", label: "Volkswagen", keywords: ["volkswagen", "vw"] },
   { slug: "range-rover", label: "Range Rover", keywords: ["range rover"] },
   { slug: "land-rover", label: "Land Rover", keywords: ["land rover", "defender", "discovery"] },
 ];

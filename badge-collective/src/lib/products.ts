@@ -152,6 +152,14 @@ const FEATURED_IDS = [
 ];
 
 /** Map a Stripe product (with an expanded default_price) to our Product shape. */
+/** Read a stock value from metadata, accepting any capitalisation (stock/Stock/STOCK). */
+function readStock(metadata: Stripe.Metadata, fallback = 0): number {
+  const raw = metadata.stock ?? metadata.Stock ?? metadata.STOCK;
+  if (raw == null) return fallback;
+  const n = Number(raw);
+  return Number.isFinite(n) ? n : fallback;
+}
+
 function fromStripe(p: Stripe.Product): Product {
   const price = p.default_price as Stripe.Price | null;
   return {
@@ -163,7 +171,7 @@ function fromStripe(p: Stripe.Product): Product {
     images: p.images ?? [],
     unitAmount: price?.unit_amount ?? 0,
     currency: "gbp",
-    stock: Number(p.metadata.stock ?? 0),
+    stock: readStock(p.metadata),
     brand: brandForName(p.name),
     pricingMode:
       p.metadata.pricing === "packs"
@@ -258,7 +266,7 @@ export async function getProduct(id: string): Promise<Product | null> {
           priceId: pr.id,
           label,
           amount: pr.unit_amount,
-          stock: Number(pr.metadata.stock ?? product.stock),
+          stock: readStock(pr.metadata, product.stock),
           includes: pr.metadata.includes ?? undefined,
         });
       }
