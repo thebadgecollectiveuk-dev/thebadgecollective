@@ -32,6 +32,7 @@ function resolveTier(product: Product): TradeTier | null {
 }
 
 export function tradeInfoFor(product: Product): TradeInfo {
+  if (product.tradeExclude) return NOT_ELIGIBLE;
   if (product.pricingMode && product.pricingMode !== "single") return NOT_ELIGIBLE;
 
   const tier = resolveTier(product);

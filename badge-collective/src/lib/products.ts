@@ -53,6 +53,7 @@ export type Product = {
   // Trade (B2B) overrides from Stripe metadata — see src/lib/trade. Retail ignores these.
   tradeTier?: string | null; // metadata `trade_tier`
   tradePriceMeta?: number | null; // metadata `trade_price` (pence)
+  tradeExclude?: boolean; // metadata `trade_exclude=true` (or `trade=false`) hides it from trade
 };
 
 const PRODUCTS: Product[] = [
@@ -178,6 +179,7 @@ function fromStripe(p: Stripe.Product): Product {
     brand: brandForName(p.name),
     tradeTier: p.metadata.trade_tier || null,
     tradePriceMeta: p.metadata.trade_price ? Number(p.metadata.trade_price) : null,
+    tradeExclude: p.metadata.trade_exclude === "true" || p.metadata.trade === "false",
     pricingMode:
       p.metadata.pricing === "packs"
         ? "packs"

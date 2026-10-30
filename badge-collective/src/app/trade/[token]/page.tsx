@@ -18,6 +18,10 @@ export default async function TradeShopPage({ params }: Props) {
   const eligible: { product: (typeof products)[number]; info: ReturnType<typeof tradeInfoFor> }[] = [];
   const unmapped: (typeof products)[number][] = [];
   for (const product of products) {
+    // Owner-hidden, and pack/fitment products, are out of trade entirely —
+    // don't even flag them in the "not yet priced" list.
+    if (product.tradeExclude) continue;
+    if (product.pricingMode && product.pricingMode !== "single") continue;
     const info = tradeInfoFor(product);
     if (info.eligible) eligible.push({ product, info });
     else unmapped.push(product);
