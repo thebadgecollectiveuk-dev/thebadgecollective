@@ -25,3 +25,8 @@ export function brandForName(name: string): string | null {
   }
   return null;
 }
+
+/** Display label for a brand slug (e.g. "bmw" -> "BMW"), or null. */
+export function brandLabel(slug: string | null | undefined): string | null {
+  return BRANDS.find((b) => b.slug === slug)?.label ?? null;
+}

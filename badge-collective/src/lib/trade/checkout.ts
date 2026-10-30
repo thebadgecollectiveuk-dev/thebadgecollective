@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
 import { getProduct } from "@/lib/products";
-import { shippingFor } from "@/lib/format";
+import { shippingFor, formatGBP } from "@/lib/format";
 import { isValidTradeToken } from "./access";
 import { tradeInfoFor } from "./pricing";
 import { TIERS, type TradeTier } from "./config";
@@ -67,8 +67,9 @@ export async function createTradeCheckout(
     const min = TIERS[tier].minSets;
     if (have < min) {
       const short = min - have;
+      const priceLabel = formatGBP(TIERS[tier].pricePence);
       return {
-        error: `The ${TIERS[tier].label} tier needs at least ${min} sets — you have ${have}. Add ${short} more ${TIERS[tier].label}-tier set${short === 1 ? "" : "s"} (any designs in that tier count together).`,
+        error: `${priceLabel} sets need a minimum of ${min} — you have ${have}. Add ${short} more ${priceLabel} set${short === 1 ? "" : "s"} (any designs at that price count together).`,
       };
     }
   }

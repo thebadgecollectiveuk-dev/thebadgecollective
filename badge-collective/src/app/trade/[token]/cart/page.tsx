@@ -16,6 +16,7 @@ import {
   type TradeCartItem,
 } from "@/lib/trade/trade-cart";
 import { useHydrated } from "@/hooks/use-hydrated";
+import { brandForName, brandLabel } from "@/lib/brands";
 import { TIERS, type TradeTier } from "@/lib/trade/config";
 import { createTradeCheckout } from "@/lib/trade/checkout";
 
@@ -128,9 +129,11 @@ export default function TradeCartPage({ params }: Props) {
                   const ok = have >= min;
                   return (
                     <div key={tier} className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">{TIERS[tier].label}</span>
+                      <span className="text-muted-foreground">
+                        {formatGBP(TIERS[tier].pricePence)} sets
+                      </span>
                       <span className={ok ? "text-chrome" : "text-amber-400"}>
-                        {have} / {min} sets
+                        {have} / {min}
                       </span>
                     </div>
                   );
@@ -164,7 +167,7 @@ export default function TradeCartPage({ params }: Props) {
                     {shortfalls
                       .map(
                         (s) =>
-                          `${TIERS[s.tier].label} needs ${s.min - s.have} more`,
+                          `${formatGBP(TIERS[s.tier].pricePence)} sets need ${s.min - s.have} more`,
                       )
                       .join("; ")}
                     .
@@ -217,7 +220,7 @@ function TradeLine({
   onQty: (q: number) => void;
   onRemove: () => void;
 }) {
-  const tier = item.tier in TIERS ? TIERS[item.tier as TradeTier].label : "";
+  const brand = brandLabel(brandForName(item.name));
   return (
     <li className="flex gap-4 py-5">
       <div className="relative size-20 shrink-0 overflow-hidden rounded-sm border border-border bg-surface">
@@ -230,7 +233,7 @@ function TradeLine({
           <div>
             <p className="font-serif text-foreground">{item.name}</p>
             <p className="text-xs text-muted-foreground">
-              {tier} tier · {formatGBP(item.tradePricePence)} per set
+              {brand ? `${brand} · ` : ""}{formatGBP(item.tradePricePence)} per set
             </p>
           </div>
           <button

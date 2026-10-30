@@ -9,6 +9,7 @@ import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { AddToTradeCart } from "@/components/trade/AddToTradeCart";
+import { brandLabel } from "@/lib/brands";
 import { tradeInfoFor } from "@/lib/trade/pricing";
 import { TIERS } from "@/lib/trade/config";
 import { WHATSAPP_PREORDER_DISPLAY, WHATSAPP_PREORDER_DIGITS } from "@/lib/trade/config";
@@ -27,6 +28,7 @@ export default async function TradeProductPage({ params }: Props) {
 
   const inStock = product.stock > 0;
   const tier = TIERS[info.tier];
+  const badge = brandLabel(product.brand);
 
   const waPreorder = `https://wa.me/${WHATSAPP_PREORDER_DIGITS}?text=${encodeURIComponent(
     `Hi Badge Collective, I'd like to pre-order the ${product.name} (trade).`,
@@ -51,9 +53,11 @@ export default async function TradeProductPage({ params }: Props) {
           />
 
           <div className="flex flex-col">
-            <span className="label-caps w-fit rounded-sm border border-chrome/30 px-2.5 py-1 text-chrome">
-              {tier.label} tier
-            </span>
+            {badge ? (
+              <span className="label-caps w-fit rounded-sm border border-chrome/30 px-2.5 py-1 text-chrome">
+                {badge}
+              </span>
+            ) : null}
             <h1 className="mt-4 font-serif text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl">
               {product.name}
             </h1>
@@ -69,8 +73,8 @@ export default async function TradeProductPage({ params }: Props) {
             </div>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Minimum {tier.minSets} sets in the {tier.label} tier (mixable with
-              other {tier.label}-tier designs).
+              Minimum {tier.minSets} sets — mix any designs at this price to
+              reach it.
             </p>
 
             <div className="mt-4 flex items-center gap-2 text-sm">

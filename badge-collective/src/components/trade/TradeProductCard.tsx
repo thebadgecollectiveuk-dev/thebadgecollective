@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { formatGBP } from "@/lib/format";
+import { brandLabel } from "@/lib/brands";
 import type { Product } from "@/lib/products";
 import type { TradeInfo } from "@/lib/trade/pricing";
-import { TIERS } from "@/lib/trade/config";
 
 type Props = {
   product: Product;
@@ -18,7 +18,7 @@ type Props = {
 export function TradeProductCard({ product, info, basePath, priority = false }: Props) {
   const inStock = product.stock > 0;
   const href = `${basePath}/product/${product.id}`;
-  const tierLabel = info.tier ? TIERS[info.tier].label : "";
+  const badge = brandLabel(product.brand);
 
   return (
     <article className="group relative flex flex-col">
@@ -43,9 +43,11 @@ export function TradeProductCard({ product, info, basePath, priority = false }: 
               !inStock && "opacity-40 grayscale",
             )}
           />
-          <span className="label-caps absolute left-3 top-3 z-20 rounded-sm border border-chrome/30 bg-background/80 px-2.5 py-1 text-chrome backdrop-blur-sm">
-            {tierLabel}
-          </span>
+          {badge ? (
+            <span className="label-caps absolute left-3 top-3 z-20 rounded-sm border border-chrome/30 bg-background/80 px-2.5 py-1 text-chrome backdrop-blur-sm">
+              {badge}
+            </span>
+          ) : null}
           {!inStock ? (
             <span className="label-caps absolute right-3 top-3 z-20 rounded-sm border border-border bg-background/80 px-2.5 py-1 text-muted-foreground backdrop-blur-sm">
               Out of stock
@@ -73,7 +75,7 @@ export function TradeProductCard({ product, info, basePath, priority = false }: 
         </div>
 
         <p className="text-xs text-muted-foreground">
-          Trade price per set · min {info.minSets} sets in this tier
+          Trade price per set · minimum {info.minSets} sets
         </p>
 
         <div className="mt-3">
