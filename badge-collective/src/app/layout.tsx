@@ -5,6 +5,7 @@ import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/layout/CartDrawer";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -64,14 +65,14 @@ export default function RootLayout({
   return (
     <html lang="en-GB" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-dvh bg-background text-foreground antialiased">
-        <div className="grain" aria-hidden="true" />
-        <div className="relative z-10 flex min-h-dvh flex-col">
-          <AnnouncementBar />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-        <CartDrawer />
+        <SiteChrome
+          announcement={<AnnouncementBar />}
+          header={<Header />}
+          footer={<Footer />}
+          cartDrawer={<CartDrawer />}
+        >
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );
