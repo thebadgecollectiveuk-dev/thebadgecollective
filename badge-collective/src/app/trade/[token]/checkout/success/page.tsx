@@ -5,7 +5,7 @@ import { stripe } from "@/lib/stripe";
 import { formatGBP } from "@/lib/format";
 import { Container } from "@/components/site/container";
 import { ChromeRule } from "@/components/site/section";
-import { PrintButton } from "@/components/trade/PrintButton";
+import { InvoiceActions } from "@/components/trade/InvoiceActions";
 
 type Props = {
   params: Promise<{ token: string }>;
@@ -162,7 +162,7 @@ export default async function TradeSuccessPage({ params, searchParams }: Props) 
             </table>
 
             <div className="mt-8 print:hidden">
-              <PrintButton />
+              <InvoiceActions invoice={order} />
             </div>
           </div>
         ) : (
