@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 import { stripe } from "@/lib/stripe";
 import { getProduct } from "@/lib/products";
@@ -74,7 +75,15 @@ export async function createTradeCheckout(
 
   const subtotal = lines.reduce((sum, l) => sum + l.unit * l.qty, 0);
   const shippingAmount = shippingFor(subtotal);
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  // Return to the same site the customer checked out from (preview or live),
+  // so the success/cancel pages aren't sent to a hardcoded domain.
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host");
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const origin = host
+    ? `${proto}://${host}`
+    : process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
