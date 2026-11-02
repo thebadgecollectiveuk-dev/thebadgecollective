@@ -43,8 +43,8 @@ export default async function ContactPage({ searchParams }: SearchParams) {
             </span>
             <h2 className="mt-6 font-serif text-2xl text-foreground">WhatsApp</h2>
             <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">
-              The quickest way to reach us. Ask about a badge, request a photo,
-              or place an order while online checkout is on its way.
+                           The quickest way to reach us. Ask about a badge, request a photo,
+              or message us for bulk orders and pre-orders.
             </p>
             <div className="mt-8">
               <WhatsAppButton message={waMessage} className="w-full sm:w-auto" />
