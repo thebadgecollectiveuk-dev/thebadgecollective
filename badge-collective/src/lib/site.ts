@@ -12,7 +12,7 @@ export const WHATSAPP_LINK = "https://wa.me/message/G5QOVH2KPCY2F1";
 
 // WhatsApp number comes from the environment. wa.me wants digits only, so we
 // strip anything else. Owner adds NEXT_PUBLIC_WHATSAPP_NUMBER after deployment.
-const RAW_WHATSAPP = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+const RAW_WHATSAPP = "447856077278";
 
 /** True once a usable WhatsApp number is configured. */
 export const hasWhatsApp = RAW_WHATSAPP.length > 0;
