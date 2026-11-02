@@ -13,7 +13,7 @@ export function absoluteUrl(pathOrUrl: string): string {
  */
 export function crawlableImageUrl(pathOrUrl: string): string {
   if (!/^https?:\/\//.test(pathOrUrl)) return absoluteUrl(pathOrUrl);
-  return `${SITE_URL}/_next/image?url=${encodeURIComponent(pathOrUrl)}&w=1200&q=90`;
+  return `${SITE_URL}/_next/image?url=${encodeURIComponent(pathOrUrl)}&w=1200&q=75`;
 }
 
 const COLOUR_WORDS = [
