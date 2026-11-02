@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   title: "Shop",
   description:
     "Browse the full collection of premium, brand new car badges. Flat-rate £3.99 postage and packaging via Royal Mail.",
+  alternates: { canonical: "/shop" },
 };
 
 // Re-read the catalogue from Stripe at most once a minute, so edits in the

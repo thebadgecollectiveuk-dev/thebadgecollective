@@ -12,6 +12,8 @@ import { PackSelector } from "@/components/product/PackSelector";
 import { FitmentSelector } from "@/components/product/FitmentSelector";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { SITE_URL, absoluteUrl } from "@/lib/seo/site-url";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -31,6 +33,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: product.name,
     description: product.description,
+    alternates: { canonical: `/shop/${product.id}` },
     openGraph: {
       title: product.name,
       description: product.description,
@@ -47,8 +50,69 @@ export default async function ProductPage({ params }: Params) {
   const inStock = product.stock > 0;
   const lowStock = inStock && product.stock <= 5;
 
+  // Structured data so Google can show price and stock in search results.
+  const productUrl = `${SITE_URL}/shop/${product.id}`;
+  const images = (
+    product.images && product.images.length > 0 ? product.images : [product.image]
+  ).map(absoluteUrl);
+  const availability = inStock
+    ? "https://schema.org/InStock"
+    : "https://schema.org/OutOfStock";
+  const variantPrices =
+    product.fitments && product.fitments.length > 0
+      ? product.fitments.map((f) => f.amount)
+      : product.packs && product.packs.length > 0
+        ? product.packs.map((p) => p.amount)
+        : [];
+  const offers =
+    variantPrices.length > 1
+      ? {
+          "@type": "AggregateOffer",
+          priceCurrency: "GBP",
+          lowPrice: (Math.min(...variantPrices) / 100).toFixed(2),
+          highPrice: (Math.max(...variantPrices) / 100).toFixed(2),
+          offerCount: variantPrices.length,
+          availability,
+          url: productUrl,
+        }
+      : {
+          "@type": "Offer",
+          priceCurrency: "GBP",
+          price: (product.unitAmount / 100).toFixed(2),
+          availability,
+          itemCondition: "https://schema.org/NewCondition",
+          url: productUrl,
+          seller: { "@type": "Organization", name: "The Badge Collective" },
+          shippingDetails: {
+            "@type": "OfferShippingDetails",
+            shippingRate: { "@type": "MonetaryAmount", value: "3.99", currency: "GBP" },
+            shippingDestination: { "@type": "DefinedRegion", addressCountry: "GB" },
+          },
+        };
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description || product.name,
+    image: images,
+    sku: product.id,
+    url: productUrl,
+    brand: { "@type": "Brand", name: "The Badge Collective" },
+    offers,
+  };
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Shop", item: `${SITE_URL}/shop` },
+      { "@type": "ListItem", position: 2, name: product.name, item: productUrl },
+    ],
+  };
+
   return (
     <div className="py-10 sm:py-14">
+      <JsonLd data={productSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Container>
         <nav aria-label="Breadcrumb" className="label-caps flex items-center gap-2 text-muted-foreground/70">
           <Link href="/shop" className="transition-colors duration-300 hover:text-foreground">

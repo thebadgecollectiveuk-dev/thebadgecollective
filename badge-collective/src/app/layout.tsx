@@ -6,6 +6,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CartDrawer } from "@/components/layout/CartDrawer";
 import { SiteChrome } from "@/components/layout/SiteChrome";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -59,12 +60,28 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
+// Tells Google who runs the site, so it can show the brand in search.
+const storeSchema = {
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  name: "The Badge Collective",
+  url: siteUrl,
+  logo: `${siteUrl}/og.jpg`,
+  email: "thebadgecollectiveuk@gmail.com",
+  areaServed: "GB",
+  sameAs: [
+    "https://www.instagram.com/thebadgecollective",
+    "https://www.tiktok.com/@thebadgecollective",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-GB" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-dvh bg-background text-foreground antialiased">
+        <JsonLd data={storeSchema} />
         <SiteChrome
           announcement={<AnnouncementBar />}
           header={<Header />}
