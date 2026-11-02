@@ -6,7 +6,7 @@
  * listings. It reads straight from Stripe, so prices and stock stay in sync.
  */
 import { getProduct, getProducts } from "@/lib/products";
-import { SITE_URL, absoluteUrl } from "@/lib/seo/site-url";
+import { SITE_URL, crawlableImageUrl, productColour } from "@/lib/seo/site-url";
 
 export const revalidate = 3600;
 
@@ -31,11 +31,12 @@ export async function GET() {
 
   const items = products
     .map((p) => {
-      const images = (p.images && p.images.length > 0 ? p.images : [p.image]).map(absoluteUrl);
+      const images = (p.images && p.images.length > 0 ? p.images : [p.image]).map(crawlableImageUrl);
       const extra = images
         .slice(1, 10)
         .map((img) => `      <g:additional_image_link>${esc(img)}</g:additional_image_link>`)
         .join("\n");
+      const colour = productColour(p.name, p.color);
       return `    <item>
       <g:id>${esc(p.id)}</g:id>
       <g:title>${esc(p.name.slice(0, 150))}</g:title>
@@ -45,7 +46,7 @@ export async function GET() {
 ${extra ? extra + "\n" : ""}      <g:availability>${p.stock > 0 ? "in_stock" : "out_of_stock"}</g:availability>
       <g:price>${(p.unitAmount / 100).toFixed(2)} GBP</g:price>
       <g:condition>new</g:condition>
-      <g:brand>The Badge Collective</g:brand>
+${colour ? `      <g:color>${esc(colour)}</g:color>\n` : ""}      <g:brand>The Badge Collective</g:brand>
       <g:identifier_exists>no</g:identifier_exists>
       <g:product_type>Vehicle Parts &amp; Accessories &gt; Car Badges &amp; Emblems</g:product_type>
       <g:shipping>

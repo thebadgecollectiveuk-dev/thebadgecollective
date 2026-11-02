@@ -13,7 +13,7 @@ import { FitmentSelector } from "@/components/product/FitmentSelector";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { WhatsAppButton } from "@/components/site/whatsapp-button";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { SITE_URL, absoluteUrl } from "@/lib/seo/site-url";
+import { SITE_URL, crawlableImageUrl } from "@/lib/seo/site-url";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: Params) {
   const productUrl = `${SITE_URL}/shop/${product.id}`;
   const images = (
     product.images && product.images.length > 0 ? product.images : [product.image]
-  ).map(absoluteUrl);
+  ).map(crawlableImageUrl);
   const availability = inStock
     ? "https://schema.org/InStock"
     : "https://schema.org/OutOfStock";

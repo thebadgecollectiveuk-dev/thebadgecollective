@@ -44,6 +44,7 @@ export type Product = {
   currency: "gbp";
   stock: number; // 0 = out of stock
   brand?: string | null; // brand slug derived from the title, for filtering
+  color?: string | null; // metadata `color` (or `colour`), used in the Google Shopping feed
   // Set by the Stripe product metadata `pricing`: "packs" (pack-size selector),
   // "fitment" (size/variant the customer must pick), otherwise single price.
   pricingMode?: "single" | "packs" | "fitment";
@@ -177,6 +178,7 @@ function fromStripe(p: Stripe.Product): Product {
     currency: "gbp",
     stock: readStock(p.metadata),
     brand: brandForName(p.name),
+    color: p.metadata.color || p.metadata.colour || p.metadata.Colour || null,
     tradeTier: p.metadata.trade_tier || null,
     tradePriceMeta: p.metadata.trade_price ? Number(p.metadata.trade_price) : null,
     tradeExclude: p.metadata.trade_exclude === "true" || p.metadata.trade === "false",
