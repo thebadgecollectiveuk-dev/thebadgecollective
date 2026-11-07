@@ -92,7 +92,7 @@ export default async function TradeProductPage({ params }: Props) {
 
             <ChromeRule className="my-7 opacity-60" />
 
-            <p className="text-base leading-relaxed text-muted-foreground">
+        <p className="whitespace-pre-line text-base leading-relaxed text-muted-foreground">
               {product.description}
             </p>
 
