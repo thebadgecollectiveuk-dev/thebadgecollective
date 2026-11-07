@@ -164,7 +164,7 @@ export default async function ProductPage({ params }: Params) {
 
             <ChromeRule className="my-7 opacity-60" />
 
-            <p className="text-base leading-relaxed text-muted-foreground">
+          <p className="whitespace-pre-line text-base leading-relaxed text-muted-foreground">
               {product.description}
             </p>
 
