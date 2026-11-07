@@ -15,6 +15,8 @@ export const BRANDS: Brand[] = [
   { slug: "volkswagen", label: "Volkswagen", keywords: ["volkswagen", "vw"] },
   { slug: "range-rover", label: "Range Rover", keywords: ["range rover"] },
   { slug: "land-rover", label: "Land Rover", keywords: ["land rover", "defender", "discovery"] },
+  { slug: "ford", label: "Ford", keywords: ["ford"] },
+  { slug: "jaguar", label: "Jaguar", keywords: ["jaguar"] },
 ];
 
 /** Return the brand slug matching a product name, or null. */
